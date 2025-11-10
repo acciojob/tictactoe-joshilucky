@@ -1,71 +1,71 @@
-const player1Input = document.getElementById("player-1");
-const player2Input = document.getElementById("player-2");
-const startBtn = document.getElementById("start-btn");
-const gameBoard = document.getElementById("game-board");
-const statusText = document.getElementById("status");
-const resetBtn = document.getElementById("reset-btn");
-const cells = document.querySelectorAll("[data-cell]");
-
-let player1, player2;
-let currentPlayer = "X";
-let running = false;
-
-// Winning combinations
-const winPatterns = [
-  [0,1,2],
-  [3,4,5],
-  [6,7,8],
-  [0,3,6],
-  [1,4,7],
-  [2,5,8],
-  [0,4,8],
-  [2,4,6]
-];
-
-startBtn.addEventListener("click", startGame);
-resetBtn.addEventListener("click", resetGame);
-
-function startGame() {
-  player1 = player1Input.value || "Player 1";
-  player2 = player2Input.value || "Player 2";
-
-  document.querySelector(".player-inputs").classList.add("hidden");
-  gameBoard.classList.remove("hidden");
-  resetBtn.classList.remove("hidden");
-
-  statusText.textContent = `${player1} (X)'s turn`;
-  running = true;
-
-  cells.forEach(cell => cell.addEventListener("click", cellClicked));
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f6fa;
+  text-align: center;
+  margin-top: 40px;
 }
 
-function cellClicked() {
-  const index = [...cells].indexOf(this);
-  if (this.textContent !== "" || !running) return;
-
-  this.textContent = currentPlayer;
-
-  if (checkWinner()) {
-    statusText.textContent = `${currentPlayer === "X" ? player1 : player2} Wins! 🎉`;
-    running = false;
-  } else if ([...cells].every(cell => cell.textContent !== "")) {
-    statusText.textContent = "It's a Draw!";
-    running = false;
-  } else {
-    currentPlayer = currentPlayer === "X" ? "O" : "X";
-    statusText.textContent = `${currentPlayer === "X" ? player1 : player2} (${currentPlayer})'s turn`;
-  }
+.container {
+  display: inline-block;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
-function checkWinner() {
-  return winPatterns.some(pattern => {
-    return pattern.every(index => cells[index].textContent === currentPlayer);
-  });
+h1 {
+  margin-bottom: 20px;
 }
 
-function resetGame() {
-  cells.forEach(cell => (cell.textContent = ""));
-  currentPlayer = "X";
-  running = true;
-  statusText.textContent = `${player1} (X)'s turn`;
+.player-inputs {
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 8px;
+  margin: 5px;
+  font-size: 14px;
+}
+
+button {
+  padding: 8px 15px;
+  margin-top: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  background: #007bff;
+  color: white;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background: #eaeaea;
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.cell:hover {
+  background: #d4d4d4;
+}
+
+.hidden {
+  display: none;
 }
